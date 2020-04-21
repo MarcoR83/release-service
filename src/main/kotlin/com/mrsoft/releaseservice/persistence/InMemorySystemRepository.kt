@@ -23,7 +23,7 @@ class InMemorySystemRepository : SystemRepository {
     }
 
     private fun getSpecificSystemVersion(version : SystemVersion.SpecificSystemVersion) : Result<Pair<SystemVersion.SpecificSystemVersion, System>> {
-        return systemVersions[version].let { if (it != null) Result.success(Pair(version, it)) else Result.failure(DataNotFoundExecption()) }
+        return systemVersions[version].let { if (it != null) Result.success(Pair(version, it.clone())) else Result.failure(DataNotFoundExecption()) }
     }
 
     override fun createSystemVersion(newSystem: System, expectedVersion: SystemVersion.SpecificSystemVersion) : Result<SystemVersion.SpecificSystemVersion> {
@@ -31,6 +31,7 @@ class InMemorySystemRepository : SystemRepository {
             return Result.failure(StaleDataException())
         }
         val newVersion = SystemVersion.SpecificSystemVersion(expectedVersion.version + 1)
+
         if (systemVersions.putIfAbsent(newVersion, newSystem) != null) {
             return Result.failure(StaleDataException())
         }

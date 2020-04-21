@@ -15,6 +15,11 @@ class System {
             true
         } else false
     }
+    fun clone() : System {
+        val new = System()
+        new.serviceVersions += this.serviceVersions
+        return new
+    }
 }
 
 sealed class SystemVersion {
